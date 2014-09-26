@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Improving testing by using real traffic from production - leonsbox.com</title>
+  <meta name="author" content="Leonid Bugaev">
+
+  
+  <meta name="description" content="Improving testing by using real traffic from production Use staging wisely TL;DR The more realistic your test data, the better. I wrote Gor - an &hellip;">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <link href="/atom.xml" rel="alternate" title="leonsbox.com" type="application/atom+xml">
+  <link rel="canonical" href="">
+  <link href="/favicon.png" rel="shortcut icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script type="text/javascript" src="//use.typekit.net/jtr8dtl.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+</head>
+
+<body>
+    <header id="header" class="inner"><h1><a href="/">leonsbox.com</a></h1>
+<nav id="main-nav"><!--
+<ul class="main">
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+--></nav>
+<nav id="mobile-nav">
+  <div class="alignleft menu">
+    <a class="button">Menu</a>
+    <div class="container"><!--
+<ul class="main">
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+--></div>
+  </div>
+  <div class="alignright search">
+    <a class="button"></a>
+    <div class="container">
+      <form action="http://google.com/search" method="get">
+        <input type="text" name="q" results="0">
+        <input type="hidden" name="q" value="site:leonsbox.com">
+      </form>
+    </div>
+  </div>
+</nav>
+<nav id="sub-nav" class="alignright">
+  <a href="/" title="About">about</a>
+  
+  <div class="social">
+
+    <!--
+    
+    
+    
+    <a class="twitter" href="http://twitter.com/buger" title="Twitter">Twitter</a>
+    
+    
+    <a class="github" href="https://github.com/buger" title="GitHub">GitHub</a>
+    
+    
+    
+    
+    
+    
+    <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+    
+    -->
+  </div>
+  <!--
+  <form class="search" action="http://google.com/search" method="get">
+    <input class="alignright" type="text" name="q" results="0">
+    <input type="hidden" name="q" value="site:leonsbox.com">
+  </form>
+  -->
+</nav>
+
+</header>
+  
+    
+  
+  <div id="content" class="inner"><article class="post">
+  <h1 class="title">Improving testing by using real traffic from production</h1>
+  
+  <h2 class="subtitle">Use staging wisely</h2>
+  
+
+  <div class="entry-content"><p><em>TL;DR The more realistic your test data, the better. I wrote <strong><a href="https://github.com/buger/gor/">Gor</a></strong> - an automated real-time http traffic replay solution that can forward part of your production traffic to staging or anywhere you want, and rate-limit it if needed</em></p>
+
+<p>Here at <a href="http://granify.com">Granify</a> we work with a LOT of user generated data, our business is build on it. So our main priority is to ensure that we are collecting and processing it right.</p>
+
+<p>You can&#8217;t imagine how weird user input can be; oddities come from many sources&#8212;proxies, browsers you&#8217;ve never heard of, client side bugs, and much more.</p>
+
+<blockquote><p>No matter how many tests and fixtures you have, they just can&#8217;t cover all cases. Production traffic always differs from your expectations.</p></blockquote>
+
+
+<p>Moreover, you can just break everything when deploying a new version, even if tests pass. This happens constantly.</p>
+
+<p>There is a whole layer of errors that just can&#8217;t be easily found via automated  and manual testing: concurrency, server environment specific bugs, some bugs can occur from requests called in a particular order, and etc.</p>
+
+<p>We can do a few thing to make finding such bugs easier and improve overall stability:</p>
+
+<h2>Testing on staging first</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/Staging_site">Staging</a> environment is mandatory, and it <b>should</b> be identical to production. Using tools like <a href="http://puppetlabs.com/">Puppet</a> or <a href="http://www.opscode.com/chef/">Chief</a> helps a lot.</p>
+
+<p>You should require developers manually test all code on staging.</p>
+
+<p>This helps you to find most obvious bugs, but it&#8217;s far from what you can get on production.</p>
+
+<h2>Testing on production data</h2>
+
+<p>There are a few techniques to do this (better to use both):</p>
+
+<ol>
+<li><p>Deploying changes only to one of production servers, so part of users will be served by the new code. This technique has some downsides. Some of your users will see errors/bugs, and you may have to use &#8220;sticky&#8221; sessions. This is quite similar to A/B testing.</p></li>
+<li><p>Replaying production traffic to staging environment.</p></li>
+</ol>
+
+
+<p>Ilya Grigorik wrote a nice article on this: <a href="http://www.igvita.com/2008/09/30/load-testing-with-log-replay">Load Testing With Log Replay</a></p>
+
+<p>In all articles I&#8217;ve read, log replay techniques are mostly mentioned in the context of load testing. I want to show you how to use log replay for daily bug testing.</p>
+
+<p>Tools like <a href="http://jmeter.apache.org/">jMeter</a>, <a href="https://code.google.com/p/httperf/">httperf</a> or <a href="http://tsung.erlang-projects.org/">Tsung</a> have support for replaying logs, but it&#8217;s very rudimentary or focused on load testing and not emulating real-users. Feel the difference? Real users are not just a list of requests, they have proper timing between requests, different http headers etc. For load testing, it does not matter, but for bug testing it matters a lot.</p>
+
+<p>Plus these tools require action and complex configuration to run.</p>
+
+<blockquote><p>Developers are lazy. If you want your developers to use your tool/service it should be automated as much as possible, it&#8217;s best if no one notices it at all.</p></blockquote>
+
+
+<p>Thats why we invented CI, automatic server configuration tools (Puppet, Chief, Fabric), EC2, and etc.</p>
+
+<h2>Automating Log replay</h2>
+
+<p>I wrote a simple tool <a href="https://github.com/buger/gor/">Gor</a></p>
+
+<p>Gor allows you to automatically replicate traffic from production to staging (or anywhere you want) in real-time, 24 hours a day, with minimal effort. So your staging environment always gets part of production traffic.</p>
+
+<p>Gor consists of 2 parts: Listener and Replay server. You should install Listener on your production web servers, and Replay server on a separate machine that will forward traffic to given address. The data flow is shown in the following diagram::</p>
+
+<p><img src="https://a248.e.akamai.net/camo.github.com/c802ae10dfd1b0b2519c5726eedad31bac18c0f6/687474703a2f2f692e696d6775722e636f6d2f7a5a43465043592e706e67" alt="Diagram" /></p>
+
+<p><strong>Gor supports rate limiting</strong>. This is a very important feature since staging environment usually uses fewer servers than production, and you&#8217;ll want to set maximum requests per second that staging can handle.</p>
+
+<p>You can find all needed info on project <a href="https://github.com/buger/gor/">Github</a> page.</p>
+
+<p>Since Gor is written in Go, everything is statically linked, so you can just download binaries from this link: <a href="https://drive.google.com/folderview?id=0B46uay48NwcfWFowc1E4a1BISVU&amp;usp=sharing">Downloads</a></p>
+
+<p>At <a href="http://granify.com">Granify</a>, we use it on production for some time, and we are very happy with the results.</p>
+
+<p>Happy testing!</p>
+
+<hr />
+
+<p>You can discuss this post at <a href="https://news.ycombinator.com/item?id=5824387">Hacker News</a></p>
+</div>
+
+
+<!--
+<div class="meta">
+  <div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-04T08:10:00+00:00" pubdate data-updated="true">Jun 4<span>th</span>, 2013</time></div>
+  <div class="tags">
+
+</div>
+  
+</div>
+--></article>
+</div>
+  <footer id="footer" class="inner">Copyright &copy; 2013
+
+    Leonid Bugaev
+
+</footer>
+  <script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-36462161-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "rwdperf",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "rwdperf": "./bin/index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pretty-bytes": "^1.0.1",
+    "chrome-remote-interface": "^0.5.0",
+    "commander": "^2.3.0",
+    "colors": "^0.6.2"
+  }
+}
