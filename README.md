@@ -12,7 +12,7 @@ Features
 - Calculate page weight
 - Track requests 
 
-
+## Sample
 ![Sample](https://raw.githubusercontent.com/lafikl/RWDPerf/master/screenshot.png)
 
 
