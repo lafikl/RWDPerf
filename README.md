@@ -6,9 +6,14 @@ WIP; testing RWD Perf
 
 Features
 ========
-- Simulate mobile devices, desktop, tablets.
-- Find unused/hidden elements and highlight it
+- Emulate mobile devices, desktop, tablets.
+- Find unused/hidden elements
+- Find unused images
+- Calculate page weight
 - Track requests 
+
+
+![Sample](https://raw.githubusercontent.com/lafikl/RWDPerf/master/screenshot.png)
 
 
 Install
