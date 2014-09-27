@@ -3,13 +3,14 @@ var Handlebars = require("handlebars")
 var http = require("http")
 var Router = require("routes-router")
 var st = require("st")
+var colors = require("colors")
 
 var router = Router()
 
 Handlebars.registerHelper('json', JSON.stringify);
 
 function serve(data, port) {
-  console.log(port)
+  console.log(("Server started, http://127.0.0.1:" + port).green)
   http.createServer(router).listen(port)
 
   /**
