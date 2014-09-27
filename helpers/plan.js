@@ -15,7 +15,8 @@ Plan.prototype.inc = function(times) {
 Plan.prototype.done = function(label, arg) {
   if ( this._planned == 0 ) return
   this._planned--
-  this.emit('done::' + label, arg)
+  if (label)
+    return this.emit('done::' + label, arg)
   if ( this._planned === 0 ) this.emit('done')
 }
 
