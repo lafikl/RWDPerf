@@ -22,7 +22,7 @@ Install
 npm install rwdperf -g
 ```
 
-Usage
+CLI Usage
 ========
 First you need to start chrome with these flags (Mac)
 
@@ -54,8 +54,42 @@ Options:
   -w, --width <val>              Viewport width
   -h, --height <val>             Viewport height
   -u, --userAgent <val>          Override user-agent
+  -j, --json                     Return results as JSON
 ```
 
+
+API Usage
+========
+First you need to start chrome with these flags (Mac)
+
+```
+sudo /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 ----disable-cache
+```
+
+then you can consume that directly from your code.
+
+```javascript
+var Rwdperf = require('rwdperf');
+
+new Rwdperf({
+  link: "http://google.com",
+  mobile: true,
+  emulateViewport: true,
+  deviceScaleFactor: 1,
+  scale: 1,
+  width: 400,
+  height: 500,
+  userAgent: null,
+  cb: handler
+}).init();
+
+function handler(err, data) {
+  if ( err ) return console.log(err);
+
+  // all worked out! do amazing stuff with the data...
+  console.log(JSON.stringify(data));
+}
+```
 
 Roadmap
 =======

@@ -14,6 +14,7 @@ cli
   .option('-w, --width <val>', 'Viewport width')
   .option('-h, --height <val>', 'Viewport height')
   .option('-u, --userAgent <val>', 'Override user-agent')
+  .option('-j, --json', 'Return results as JSON', true)
   .parse(process.argv);
 
 if ( !cli.link ) {
@@ -27,7 +28,7 @@ cli.cb = function(err, data) {
   if (err) {
     return console.log(String(err).red)
   }
-  if ( cli.json ) return JSON.stringify(data)
+  if ( cli.json ) return console.log(JSON.stringify(data))
 
   var server = require('../web')
   server(data, cli.port)
