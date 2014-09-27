@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RWDPerf - {{requests.0.url}}</title>
+  <link rel="stylesheet" type="text/css" href="/static/normalize.css">
+  <link rel="stylesheet" type="text/css" href="/static/rwdperf.css">
+  <!-- Load c3.css -->
+  <link href="/static/c3.css" rel="stylesheet" type="text/css">
+  <meta charset="utf-8">
+</head>
+<body>
+  <div class="page">
+    <h2 class="t-center main-head">RWDPerf - <a href="{{requests.0.url}}">{{requests.0.url}}</a></h2>
+    <div class="seperator">
+      Network ({{network.humanTotal}})
+    </div>
+    <div id="network" class="box cf">
+        <div style="max-width: 100%;" id="resource-usage"></div>
+        <div style="max-width: 100%;" id="resource-weight"></div>
+    </div><!-- end #network -->
+
+    <div class="seperator">
+        Unused Images ({{unused.bytes.humanWeight}})
+    </div>
+    <div id="unused-images" class="box">
+      <ul>
+      {{#each unused.bytes.list}}
+        <li><span class="label label-{{type}}">{{type}}</span> <b>{{humanWeight}}</b> – <a href="{{url}}">{{url}}</a></li>
+      {{else}}
+        <li>No unused images! woot!</li>
+      {{/each}}
+      </ul>
+    </div>
+
+
+    <div class="seperator">
+      Unused Elements ({{unused.elements.length}})
+    </div>
+    <div id="unused-el" class="box">
+        {{#each unused.elements}}
+          <pre class="unused-el">{{el}}</pre>
+        {{/each}}
+    </div><!-- end #unused-el -->
+
+    <div class="seperator">
+      Requests ({{requests.length}})
+    </div>
+    <div id="requests" class="box">
+        <ul>
+      {{#each requests}}
+        <li><span class="label label-{{type}}">{{type}}</span> <b>{{humanWeight}}</b> – <a href="{{url}}">{{url}}</a></li>
+      {{/each}}
+      </ul>
+    </div><!-- end #unused-el -->
+  </div>
+
+<!-- Load d3.js and c3.js -->
+<script src="/static/d3.min.js" charset="utf-8"></script>
+<script src="/static/c3.min.js"></script>
+<script type="text/javascript">
+  var typesUsage = {{{json network.typesUsage}}}
+  var unusedImages = {{{json unused.bytes}}}
+  var chart = c3.generate({
+      bindto: "#resource-usage",
+      data: {
+          columns: _genTypesUsage(typesUsage, "count"),
+          type : 'donut',
+      },
+      donut: {
+          title: "Reqs by resources count"
+      }
+  });
+
+  c3.generate({
+      bindto: "#resource-weight",
+      data: {
+          columns: _genTypesUsage(typesUsage, "weight"),
+          type : 'donut',
+      },
+      donut: {
+          title: "Reqs by resources weight"
+      }
+  });
+
+  c3.generate({
+      bindto: "#chart-unused-images",
+      data: {
+          columns: [
+            ["Used", ]
+          ],
+          type : 'donut',
+      },
+      donut: {
+          title: "Reqs by resources weight"
+      }
+  });
+
+
+
+  function _genTypesUsage(data, key) {
+    var usage = []
+    for (var type in data) {
+      usage.push([ type ,data[type][key]])
+    }
+    return usage
+  }
+</script>
+</body>
+</html>

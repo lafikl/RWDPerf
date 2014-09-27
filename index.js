@@ -88,11 +88,14 @@ Run.prototype.setUa = function() {
 Run.prototype.collectReqs = function() {
   var self = this
   this.chrome.on('Network.responseReceived', function (req) {
+    if ( req.response.url.substr(0, 6) == "chrome" ) return
+      var contentLength = parseInt(req.response.headers['Content-Length']) || 0
       self.stats.requests.push(
         {
           url: req.response.url,
           type: req.type,
-          contentLength: parseInt(req.response.headers['Content-Length']) || 0
+          contentLength: contentLength,
+          humanWeight: prettyBytes(contentLength)
         }
       )
   })
@@ -121,9 +124,11 @@ Run.prototype._onElsDone = function() {
   var unusedEls = this.stats.unused.elements
   for (var i = 0; i < unusedEls.length; i++) {
     obj = find(unusedEls[i].images, this.stats.requests, "url")
+
     if ( obj ) {
        bytes.list.push(obj)
        bytes.total += parseInt(obj.contentLength)
+       obj.humanWeight = prettyBytes(parseInt(obj.contentLength))
     }
   }
   bytes.humanWeight = prettyBytes(bytes.total)
@@ -151,7 +156,7 @@ Run.prototype._onRequestsDone = function(requests) {
 
 Run.prototype._onDone = function() {
   this.chrome.close()
-  this.opts.cb(false, JSON.stringify(this.stats))
+  this.opts.cb(false, this.stats)
 }
 
 module.exports = Run

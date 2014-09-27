@@ -27,7 +27,9 @@ cli.cb = function(err, data) {
   if (err) {
     return console.log(String(err).red)
   }
-  console.log(data)
+  if ( cli.json ) return JSON.stringify(data)
+
+  var server = require('../web')
+  server(data, cli.port)
 }
 new Run(cli).init()
-

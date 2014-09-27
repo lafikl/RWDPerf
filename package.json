@@ -15,6 +15,9 @@
     "pretty-bytes": "^1.0.1",
     "chrome-remote-interface": "^0.5.0",
     "commander": "^2.3.0",
-    "colors": "^0.6.2"
+    "colors": "^0.6.2",
+    "handlebars": "^2.0.0",
+    "st": "^0.5.2",
+    "routes-router": "^4.1.1"
   }
 }

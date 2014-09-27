@@ -1,0 +1,173 @@
+body {
+  background: #f5f5f5;
+  -webkit-font-smoothing: antialiased;
+  color: #444;
+}
+.page {
+  margin: 40px auto;
+  max-width: 960px;
+
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #dedede;
+  box-shadow: #ededed 0 0 5px;
+}
+.box {
+  padding: 0 40px;
+}
+.main-head {
+  color: #444;
+  font-weight: 600;
+}
+a {
+  color: #08c;
+  text-decoration: none;
+}
+.box .box-subheader:first-child {
+  margin-top: 0;
+}
+
+.box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.box ul li {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px dotted #ededed;
+}
+.box ul li:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.seperator {
+  height: 40px;
+  width: 100%;
+  margin: 40px 0;
+
+  background: #345;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.seperator.top {
+  border-top: none;
+  border-radius: 5px 5px 0 0;
+}
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-weight: 400;
+}
+
+.box-subheader {
+  color: #444;
+  border-bottom: 2px dotted #ededed;
+  padding-bottom: 15px;
+}
+
+.unused-el {
+  margin: 20px 0;
+}
+
+#unused-el hr {
+  height: 1px;
+  border: none;
+  background: #ededed;
+}
+
+.t-center {
+  text-align: center;
+}
+
+
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+.label-Image {
+  background-color: rgb(44, 160, 44);
+}
+.label-Stylesheet {
+  background-color: rgb(140, 86, 75);
+}
+.label-Script {
+  background-color: rgb(148, 103, 189);
+}
+.label-Document {
+  background-color: rgb(31, 119, 180);
+}
+.label-Font {
+  background-color: rgb(255, 127, 14);
+}
+.label-Other {
+  background-color: rgb(214, 39, 40);
+}
+.label-WebSocket {
+  background-color: rgb(227, 119, 194);
+}
+.label-XHR {
+  background-color: rgb(127, 127, 127);
+}
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}
+
+pre, li, p {
+  white-space: pre;           /* CSS 2.0 */
+  white-space: pre-wrap;      /* CSS 2.1 */
+  white-space: pre-line;      /* CSS 3.0 */
+  white-space: -pre-wrap;     /* Opera 4-6 */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap;  /* HP Printers */
+  word-wrap: break-word;      /* IE 5+ */
+  }
