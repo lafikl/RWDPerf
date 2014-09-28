@@ -47,7 +47,6 @@ function _template(data, cb) {
   fs.readFile(__dirname + '/templates/index.html', function(err, html) {
     if (err) return cb(err)
     var template = Handlebars.compile(html.toString())
-    console.log(data)
     var compiled = template(data)
     cb(compiled)
   })
