@@ -4,7 +4,7 @@ var cli = require('commander')
 var colors = require('colors')
 
 cli
-  .version('0.0.0')
+  .version(require('../package').version)
   .option('-l, --link <val>', 'Link to be tested')
   .option('-p, --port [val]', 'set a port, defaults to 3000', 3000)
   .option('-m, --mobile', 'Emulate mobile', false)
@@ -18,7 +18,7 @@ cli
   .parse(process.argv);
 
 if ( !cli.link ) {
-  console.log('you need to pass a url'.red)
+  console.log('You need to pass a url to --link parameter.'.red)
   return
 }
 
