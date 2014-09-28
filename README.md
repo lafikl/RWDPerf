@@ -1,7 +1,7 @@
 RWDPerf
 =======
 
-WIP; testing RWD Perf
+Performance testing for Responsive web design websites.
 
 
 Features
@@ -29,6 +29,8 @@ First you need to start chrome with these flags (Mac)
 ```
 sudo /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 ----disable-cache
 ```
+**NOTE** You can do the same for other OS, just change the page for the chrome (e.g `chrome.exe` in Windows)
+
 
 then start another session and enter this command
 
@@ -97,3 +99,7 @@ Roadmap
 - unused CSS
 - Test multiple urls
 - Add pre-configured device metrics (e.g iPhone 6)
+- Run chrome through the tool itself [#6](https://github.com/lafikl/RWDPerf/issues/6)
+
+
+
