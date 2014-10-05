@@ -39,6 +39,7 @@ function serve(data, port) {
   router.addRoute("/static/*", st({
     path: __dirname + "/static",
     url: "/static",
+    dot: true,
     cache: false
   }))
 }
