@@ -29,7 +29,7 @@ First you need to start chrome with these flags (Mac)
 ```
 sudo /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 ----disable-cache
 ```
-**NOTE** You can do the same for other OS, just change the page for the chrome (e.g `chrome.exe` in Windows)
+**NOTE** You can do the same for other OS, just change the path to chrome (e.g `chrome.exe` in Windows)
 
 
 then start another session and enter this command
