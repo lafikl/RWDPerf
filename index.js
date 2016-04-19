@@ -13,8 +13,8 @@ function Run(opts) {
   this.stats.network.total = 0
   this.stats.network.typesUsage = {
     "Document": { count: 0, weight: 0},
-    "Font": { count: 0, weight: 0},
     "Fetch": { count: 0, weight: 0},
+    "Font": { count: 0, weight: 0},
     "Image": { count: 0, weight: 0},
     "Other": { count: 0, weight: 0},
     "Script": { count: 0, weight: 0},
