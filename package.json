@@ -19,5 +19,10 @@
     "handlebars": "^2.0.0",
     "st": "^0.5.2",
     "routes-router": "^4.1.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.8",
+    "gulp-jshint": "^1.8",
+    "jshint-stylish": "^1.0"
   }
 }
